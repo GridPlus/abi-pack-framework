@@ -1,0 +1,40 @@
+[
+  // Includes both v2 and v3
+  // Uniswap: https://uniswap.org/docs/v2/smart-contracts/factory
+  {
+    "address": "0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D", // V2 router
+    "app": "Uniswap",
+    "fname": "uniswap",
+    "website": "https://uniswap.org/docs/v2/smart-contracts/factory"
+  },
+  {
+    "address": "0x5C69bEe701ef814a2B6a3EDD4B1652CB9cc5aA6f", // Factory
+    "app": "Uniswap",
+    "fname": "uniswap",
+    "website": "https://uniswap.org/docs/v2/smart-contracts/factory"
+  },
+  {
+    "address": "0xd3d2E2692501A5c9Ca623199D38826e513033a17", // UNI-V2 UNIETH LP
+    "app": "Uniswap",
+    "fname": "uniswap",
+    "website": "https://uniswap.org/docs/v2/smart-contracts/factory"
+  },
+  {
+    "address": "0x1f9840a85d5af5bf1d1762f925bdaddc4201f984", // UNI token
+    "app": "Uniswap",
+    "fname": "uniswap",
+    "website": "https://uniswap.org/docs/v2/smart-contracts/factory"
+  },
+  {
+    "address": "0xE592427A0AEce92De3Edee1F18E0157C05861564", // v3 SwapRouter
+    "app": "UniSwap",
+    "fname": "uniswap",
+    "website": "https://github.com/Uniswap/uniswap-v3-periphery/blob/main/deploys.md"
+  },
+  {
+    "address": "0xA5644E29708357803b5A882D272c41cC0dF92B34", // v3 Migrator
+    "app": "UniSwap",
+    "fname": "uniswap",
+    "website": "https://github.com/Uniswap/uniswap-v3-periphery/blob/main/deploys.md"
+  }
+]
