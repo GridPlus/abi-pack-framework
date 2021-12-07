@@ -1,0 +1,20 @@
+{
+  "name": "Gnosis Safe",
+  "desc": "Contract definitions for the Gnosis Safe application",
+  "version": "2",
+  "website": "https://github.com/gnosis/safe-contracts/blob/v1.3.0/CHANGELOG.md",
+  "addresses": [
+    {
+      "address": "0x76E2cFc1F5Fa8F6a5b3fC4c8F4788F0116861F9B",
+      "tag": "Proxy Factory 1.1.1"
+    },
+    {
+      "address": "0x6851D6fDFAfD08c0295C392436245E5bc78B0185",
+      "tag": "Mastercopy 1.2.0"
+    },
+    {
+      "address": "0x8D29bE29923b68abfDD21e541b9374737B49cdAD",
+      "tag": "Multi Send 1.1.1"
+    }
+  ]
+}

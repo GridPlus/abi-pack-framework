@@ -26,7 +26,7 @@ const parseAbi = new SDK({ crypto: require("crypto") }).parseAbi;
 const jsonc = require("jsonc");
 const Throttle = require("superagent-throttle");
 
-const METADATA_PATH = "./metadata";
+const CONTRACTS_PATH = "./contracts";
 const BASE_URL = "https://pay.gridplus.io:3000/contractData";
 const BASE = `https://api.etherscan.io`;
 const OUTPUT_DIRECTORY_PATH = "./abi_packs";
@@ -43,23 +43,27 @@ const throttle = new Throttle({
 function etherscanUrl(address) {
   return `${BASE}/api?module=contract&action=getabi&address=${address}&apikey=${ETHERSCAN_KEY}`;
 }
+function getPackFileName(pack) {
+  const formattedName = pack.metadata.name.replace(/\s+/g, "_").toLowerCase();
+  return `v${pack.metadata.version}_${formattedName}.json`;
+}
 
-function getOutputFileLocation(name) {
-  return `${OUTPUT_DIRECTORY_PATH}/${OUTPUT_FILE_VERSION}_${name}.json`;
+function getOutputFileLocation(pack) {
+  return `${OUTPUT_DIRECTORY_PATH}/${getPackFileName(pack)}`;
 }
 
 function injestMetadata(path) {
   return jsonc.parse(fs.readFileSync(path).toString());
 }
 
-function loadMetadataFiles() {
+function loadContractFiles() {
   return fs
-    .readdirSync(METADATA_PATH)
-    .map((filename) => `${METADATA_PATH}/${filename}`)
+    .readdirSync(CONTRACTS_PATH)
+    .map((filename) => `${CONTRACTS_PATH}/${filename}`)
     .map(injestMetadata);
 }
 
-function fetchPackData({ address }) {
+function fetchPackData(address) {
   return superagent
     .get(etherscanUrl(address))
     .use(throttle.plugin())
@@ -75,47 +79,42 @@ function fetchPackData({ address }) {
     .catch(console.error);
 }
 
-function parsePackData(data) {
-  return parseAbi("etherscan", data, true);
+function parseAddress(address) {
+  return parseAbi("etherscan", address, true);
 }
 
-async function processMetadata(metadata) {
+async function processContractData(contractData) {
   const defs = await Promise.all(
-    metadata.map((pack) => fetchPackData(pack).then(parsePackData))
+    contractData.addresses.map(({ address }) =>
+      fetchPackData(address).then(parseAddress)
+    )
   );
 
   return {
     defs: defs.flat(),
-    metadata,
+    metadata: contractData,
   };
 }
 
-function generateAbiPacks() {
-  return loadMetadataFiles().map(processMetadata);
-}
-
-function getPackName(pack) {
-  if (!pack.metadata) return;
-  return pack.metadata[0].app.toLowerCase();
-}
-
 function writeIndexFile(packs) {
-  const packNames = packs.map(getPackName);
-  const dataToWrite = JSON.stringify(packNames);
-  fs.writeFileSync(getOutputFileLocation("index"), dataToWrite);
+  const formattedPackData = packs.map((pack) => ({
+    ...pack.metadata,
+    fname: getPackFileName(pack),
+  }));
+  const dataToWrite = JSON.stringify(formattedPackData);
+  fs.writeFileSync(`${OUTPUT_DIRECTORY_PATH}/index.json`, dataToWrite);
   console.log(`Wrote Index`);
 }
 
 function writePackData(packs) {
   return packs.map((pack) => {
-    const name = getPackName(pack);
     const dataToWrite = JSON.stringify(pack);
-    fs.writeFileSync(getOutputFileLocation(name), dataToWrite);
-    console.log(`${name} Wrote ${pack.defs.length} defs`);
+    fs.writeFileSync(getOutputFileLocation(pack), dataToWrite);
+    console.log(`${pack.metadata.name} Wrote ${pack.defs.length} defs`);
   });
 }
 
-Promise.all(generateAbiPacks()).then((packs) => {
+Promise.all(loadContractFiles().map(processContractData)).then((packs) => {
   writePackData(packs);
   writeIndexFile(packs);
 });

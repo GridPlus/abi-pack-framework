@@ -1,0 +1,24 @@
+{
+  "name": "Opyn",
+  "desc": "Contract definitions from Opyn V3",
+  "version": "2",
+  "website": "https://opyn.gitbook.io/opyn/contracts/addressbook-1",
+  "addresses": [
+    {
+      "address": "0x61935CbDd02287B511119DDb11Aeb42F1593b7Ef",
+      "tag": "v3 exchange"
+    },
+    {
+      "address": "0x7C06792Af1632E77cb27a558Dc0885338F4Bdf8E",
+      "tag": "OtokenFactory"
+    },
+    {
+      "address": "0x4ccc2339F87F6c59c6893E1A678c2266cA58dC72",
+      "tag": "Controller"
+    },
+    {
+      "address": "0x8f7Dd610c457FC7Cb26B0f9Db4e77581f94F70aC",
+      "tag": "Payable Proxy (operator)"
+    }
+  ]
+}
