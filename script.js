@@ -24,6 +24,7 @@ const SDK = require("gridplus-sdk").Client;
 const superagent = require("superagent");
 const parseAbi = new SDK({ crypto: require("crypto") }).parseAbi;
 const jsonc = require("jsonc");
+const Throttle = require("superagent-throttle");
 
 const METADATA_PATH = "./metadata";
 const BASE_URL = "https://pay.gridplus.io:3000/contractData";
@@ -31,6 +32,13 @@ const BASE = `https://api.etherscan.io`;
 const OUTPUT_DIRECTORY_PATH = "./abi_packs";
 const ETHERSCAN_KEY = process.env.ETHERSCAN_KEY;
 const OUTPUT_FILE_VERSION = process.env.OUTPUT_FILE_VERSION ?? "v2";
+
+const throttle = new Throttle({
+  active: true,
+  rate: 5,
+  ratePer: 1000,
+  concurrent: 1,
+});
 
 function etherscanUrl(address) {
   return `${BASE}/api?module=contract&action=getabi&address=${address}&apikey=${ETHERSCAN_KEY}`;
@@ -54,6 +62,7 @@ function loadMetadataFiles() {
 function fetchPackData({ address }) {
   return superagent
     .get(etherscanUrl(address))
+    .use(throttle.plugin())
     .then((res) => JSON.parse(res.text))
     .then((json) => {
       if (json.status === "1") {
@@ -85,14 +94,28 @@ function generateAbiPacks() {
   return loadMetadataFiles().map(processMetadata);
 }
 
+function getPackName(pack) {
+  if (!pack.metadata) return;
+  return pack.metadata[0].app.toLowerCase();
+}
+
+function writeIndexFile(packs) {
+  const packNames = packs.map(getPackName);
+  const dataToWrite = JSON.stringify(packNames);
+  fs.writeFileSync(getOutputFileLocation("index"), dataToWrite);
+  console.log(`Wrote Index`);
+}
+
 function writePackData(packs) {
   return packs.map((pack) => {
-    if (!pack.metadata) return;
-    const name = pack.metadata[0].app.toLowerCase();
+    const name = getPackName(pack);
     const dataToWrite = JSON.stringify(pack);
     fs.writeFileSync(getOutputFileLocation(name), dataToWrite);
     console.log(`${name} Wrote ${pack.defs.length} defs`);
   });
 }
 
-Promise.all(generateAbiPacks()).then(writePackData);
+Promise.all(generateAbiPacks()).then((packs) => {
+  writePackData(packs);
+  writeIndexFile(packs);
+});
