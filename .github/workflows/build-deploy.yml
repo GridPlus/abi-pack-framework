@@ -26,7 +26,9 @@ jobs:
         run: npm ci
 
       - name: Build project
-        run: ETHERSCAN_KEY=${{ secrets.ETHERSCAN_KEY }} npm run build
+        env:
+          ETHERSCAN_KEY: ${{ secrets.ETHERSCAN_KEY }}
+        run: npm run build
 
       - name: Upload production-ready build files
         uses: actions/upload-artifact@v2
