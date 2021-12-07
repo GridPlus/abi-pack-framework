@@ -1,0 +1,25 @@
+{
+  "name": "abi-pack-framework",
+  "version": "0.0.1",
+  "description": "",
+  "main": "script.js",
+  "scripts": {
+    "build": "node ./script.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GridPlus/abi-pack-framework.git"
+  },
+  "keywords": [],
+  "author": "Doug Lance",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/GridPlus/abi-pack-framework/issues"
+  },
+  "homepage": "https://github.com/GridPlus/abi-pack-framework#readme",
+  "dependencies": {
+    "gridplus-sdk": "^0.9.2",
+    "jsonc": "^2.0.0",
+    "superagent": "^6.1.0"
+  }
+}

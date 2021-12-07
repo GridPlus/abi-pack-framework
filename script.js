@@ -25,7 +25,7 @@ const superagent = require("superagent");
 const parseAbi = new SDK({ crypto: require("crypto") }).parseAbi;
 const jsonc = require("jsonc");
 
-const METADATA_PATH = "./data";
+const METADATA_PATH = "./metadata";
 const BASE_URL = "https://pay.gridplus.io:3000/contractData";
 const BASE = `https://api.etherscan.io`;
 const OUTPUT_DIRECTORY_PATH = "./abi_packs";
@@ -40,11 +40,15 @@ function getOutputFileLocation(name) {
   return `${OUTPUT_DIRECTORY_PATH}/${OUTPUT_FILE_VERSION}_${name}.json`;
 }
 
+function injestMetadata(path) {
+  return jsonc.parse(fs.readFileSync(path).toString());
+}
+
 function loadMetadataFiles() {
   return fs
     .readdirSync(METADATA_PATH)
     .map((filename) => `${METADATA_PATH}/${filename}`)
-    .map((path) => jsonc.parse(fs.readFileSync(path).toString()));
+    .map(injestMetadata);
 }
 
 function fetchPackData({ address }) {
@@ -52,7 +56,7 @@ function fetchPackData({ address }) {
     .get(etherscanUrl(address))
     .then((res) => JSON.parse(res.text))
     .then((json) => {
-      if (json.message === "OK") {
+      if (json.status === "1") {
         return JSON.parse(json.result);
       } else {
         console.error(`ERROR: ${json.result}`);
@@ -62,18 +66,23 @@ function fetchPackData({ address }) {
     .catch(console.error);
 }
 
-async function fetchAndParsePack(pack) {
-  return fetchPackData(pack).then((data) => parseAbi("etherscan", data, true));
+function parsePackData(data) {
+  return parseAbi("etherscan", data, true);
+}
+
+async function processMetadata(metadata) {
+  const defs = await Promise.all(
+    metadata.map((pack) => fetchPackData(pack).then(parsePackData))
+  );
+
+  return {
+    defs: defs.flat(),
+    metadata,
+  };
 }
 
 function generateAbiPacks() {
-  return loadMetadataFiles().map(async (metadata) => {
-    const defs = await Promise.all(metadata.map(fetchAndParsePack));
-    return {
-      defs: defs.flat(),
-      metadata,
-    };
-  });
+  return loadMetadataFiles().map(processMetadata);
 }
 
 function writePackData(packs) {
