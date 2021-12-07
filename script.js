@@ -102,7 +102,7 @@ function writeIndexFile(packs) {
     fname: getPackFileName(pack),
   }));
   const dataToWrite = JSON.stringify(formattedPackData);
-  fs.writeFileSync(`${OUTPUT_DIRECTORY_PATH}/index.json`, dataToWrite);
+  fs.writeFileSync(`${OUTPUT_DIRECTORY_PATH}/contract_index.json`, dataToWrite);
   console.log(`Wrote Index`);
 }
 
