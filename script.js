@@ -97,10 +97,12 @@ async function processContractData(contractData) {
 }
 
 function writeIndexFile(packs) {
-  const formattedPackData = packs.map((pack) => ({
-    ...pack.metadata,
-    fname: getPackFileName(pack),
-  }));
+  const formattedPackData = packs
+    .map((pack) => ({
+      ...pack.metadata,
+      fname: getPackFileName(pack),
+    }))
+    .sort((packA, packB) => (packB.priority ?? 0) - (packA.priority ?? 0));
   const dataToWrite = JSON.stringify(formattedPackData);
   fs.writeFileSync(`${OUTPUT_DIRECTORY_PATH}/index.json`, dataToWrite);
   console.log(`Wrote Index`);

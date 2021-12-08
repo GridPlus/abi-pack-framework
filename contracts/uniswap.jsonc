@@ -3,6 +3,7 @@
   "desc": "Contract definitions from Uniswap V2 and V3.",
   "version": "2",
   "website": "https://github.com/Uniswap/v3-periphery/blob/main/deploys.md",
+  "priority": 1,
   "addresses": [
     {
       "address": "0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D",
