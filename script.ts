@@ -18,7 +18,7 @@ To run this script, you will need a working Etherscan API key:
 If you wish to change which packs are being fetched and built, just change the `PACKS_TO_BUILD` variable near the 
 bottom of this script.
 */
-
+import { ABIPack, Contract } from "./types";
 const fs = require("fs");
 const SDK = require("gridplus-sdk").Client;
 const superagent = require("superagent");
@@ -40,35 +40,35 @@ const throttle = new Throttle({
   concurrent: 1,
 });
 
-function etherscanUrl(address) {
+function etherscanUrl(address: string) {
   return `${BASE}/api?module=contract&action=getabi&address=${address}&apikey=${ETHERSCAN_KEY}`;
 }
-function getPackFileName(pack) {
+function getPackFileName(pack: ABIPack) {
   const formattedName = pack.metadata.name.replace(/\s+/g, "_").toLowerCase();
   return `v${pack.metadata.version}_${formattedName}.json`;
 }
 
-function getOutputFileLocation(pack) {
+function getOutputFileLocation(pack: ABIPack) {
   return `${OUTPUT_DIRECTORY_PATH}/${getPackFileName(pack)}`;
 }
 
-function injestMetadata(path) {
+function injestMetadata(path: string) {
   return jsonc.parse(fs.readFileSync(path).toString());
 }
 
-function loadContractFiles() {
+function loadContractFiles(): Contract[] {
   return fs
     .readdirSync(CONTRACTS_PATH)
-    .map((filename) => `${CONTRACTS_PATH}/${filename}`)
+    .map((filename: string) => `${CONTRACTS_PATH}/${filename}`)
     .map(injestMetadata);
 }
 
-function fetchPackData(address) {
+function fetchPackData(address: string) {
   return superagent
     .get(etherscanUrl(address))
     .use(throttle.plugin())
-    .then((res) => JSON.parse(res.text))
-    .then((json) => {
+    .then((res: any) => JSON.parse(res.text))
+    .then((json: any) => {
       if (json.status === "1") {
         return JSON.parse(json.result);
       } else {
@@ -79,11 +79,11 @@ function fetchPackData(address) {
     .catch(console.error);
 }
 
-function parseAddress(address) {
+function parseAddress(address: string) {
   return parseAbi("etherscan", address, true);
 }
 
-async function processContractData(contractData) {
+async function processContractData(contractData: Contract) {
   const defs = await Promise.all(
     contractData.addresses.map(({ address }) =>
       fetchPackData(address).then(parseAddress)
@@ -96,7 +96,7 @@ async function processContractData(contractData) {
   };
 }
 
-function writeIndexFile(packs) {
+function writeIndexFile(packs: ABIPack[]) {
   const formattedPackData = packs
     .map((pack) => ({
       ...pack.metadata,
@@ -108,7 +108,7 @@ function writeIndexFile(packs) {
   console.log(`Wrote Index`);
 }
 
-function writePackData(packs) {
+function writePackData(packs: ABIPack[]) {
   return packs.map((pack) => {
     const dataToWrite = JSON.stringify(pack);
     fs.writeFileSync(getOutputFileLocation(pack), dataToWrite);
