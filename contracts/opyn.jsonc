@@ -6,18 +6,22 @@
   "addresses": [
     {
       "address": "0x61935CbDd02287B511119DDb11Aeb42F1593b7Ef",
+      "network": "etherscan",
       "tag": "v3 exchange"
     },
     {
       "address": "0x7C06792Af1632E77cb27a558Dc0885338F4Bdf8E",
+      "network": "etherscan",
       "tag": "OtokenFactory"
     },
     {
       "address": "0x4ccc2339F87F6c59c6893E1A678c2266cA58dC72",
+      "network": "etherscan",
       "tag": "Controller"
     },
     {
       "address": "0x8f7Dd610c457FC7Cb26B0f9Db4e77581f94F70aC",
+      "network": "etherscan",
       "tag": "Payable Proxy (operator)"
     }
   ]
