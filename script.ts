@@ -18,7 +18,7 @@ To run this script, you will need a working Etherscan API key:
 If you wish to change which packs are being fetched and built, just change the `PACKS_TO_BUILD` variable near the 
 bottom of this script.
 */
-import { ABIPack, Contract } from "./types";
+import { ABIPack, Contract, TaggedAddress } from "./types";
 const fs = require("fs");
 const SDK = require("gridplus-sdk").Client;
 const superagent = require("superagent");
@@ -26,22 +26,63 @@ const parseAbi = new SDK({ crypto: require("crypto") }).parseAbi;
 const jsonc = require("jsonc");
 const Throttle = require("superagent-throttle");
 
+const CONTRACT_NETWORKS = {
+  ethereum: {
+    baseUrl: "https://api.etherscan.io",
+    apiKey: process.env.ETHERSCAN_KEY,
+    apiRoute: "api?module=contract&action=getabi&address=",
+    throttle: new Throttle({
+      active: true,
+      rate: 5,
+      ratePer: 1000,
+      concurrent: 1,
+    }),
+  },
+  polygon: {
+    baseUrl: "https://api.polygonscan.com",
+    apiKey: process.env.POLYGON_KEY,
+    apiRoute: "api?module=contract&action=getabi&address=",
+    throttle: new Throttle({
+      active: true,
+      rate: 5,
+      ratePer: 1000,
+      concurrent: 1,
+    }),
+  },
+  binance: {
+    baseUrl: "https://api.bscscan.com",
+    apiKey: process.env.BINANCE_KEY,
+    apiRoute: "api?module=contract&action=getabi&address=",
+    throttle: new Throttle({
+      active: true,
+      rate: 5,
+      ratePer: 1000,
+      concurrent: 1,
+    }),
+  },
+  avalanche: {
+    baseUrl: "https://api.snowtrace.io",
+    apiKey: process.env.SNOWTRACE_KEY,
+    apiRoute: "api?module=contract&action=getabi&address=",
+    throttle: new Throttle({
+      active: true,
+      rate: 5,
+      ratePer: 1000,
+      concurrent: 1,
+    }),
+  },
+};
 const CONTRACTS_PATH = "./contracts";
-const BASE_URL = "https://pay.gridplus.io:3000/contractData";
-const BASE = `https://api.etherscan.io`;
 const OUTPUT_DIRECTORY_PATH = "./abi_packs";
-const ETHERSCAN_KEY = process.env.ETHERSCAN_KEY;
-const OUTPUT_FILE_VERSION = process.env.OUTPUT_FILE_VERSION ?? "v2";
 
-const throttle = new Throttle({
-  active: true,
-  rate: 5,
-  ratePer: 1000,
-  concurrent: 1,
-});
+function getThrottle({ network }: TaggedAddress) {
+  const { throttle } = CONTRACT_NETWORKS[network];
+  return throttle.plugin();
+}
 
-function etherscanUrl(address: string) {
-  return `${BASE}/api?module=contract&action=getabi&address=${address}&apikey=${ETHERSCAN_KEY}`;
+function getNetworkUrl({ address, network }: TaggedAddress) {
+  const { baseUrl, apiKey, apiRoute } = CONTRACT_NETWORKS[network];
+  return `${baseUrl}/${apiRoute}${address}&apikey=${apiKey}`;
 }
 function getPackFileName(pack: ABIPack) {
   const formattedName = pack.metadata.name.replace(/\s+/g, "_").toLowerCase();
@@ -63,10 +104,10 @@ function loadContractFiles(): Contract[] {
     .map(injestMetadata);
 }
 
-function fetchPackData(address: string) {
+function fetchPackData(address: TaggedAddress) {
   return superagent
-    .get(etherscanUrl(address))
-    .use(throttle.plugin())
+    .get(getNetworkUrl(address))
+    .use(getThrottle(address))
     .then((res: any) => JSON.parse(res.text))
     .then((json: any) => {
       if (json.status === "1") {
@@ -85,7 +126,7 @@ function parseAddress(address: string) {
 
 async function processContractData(contractData: Contract) {
   const defs = await Promise.all(
-    contractData.addresses.map(({ address }) =>
+    contractData.addresses.map((address) =>
       fetchPackData(address).then(parseAddress)
     )
   );

@@ -6,12 +6,12 @@
   "addresses": [
     {
       "address": "0x7d2768dE32b0b80b7a3454c06BdAc94A69DDc7A9",
-      "network": "etherscan",
+      "network": "ethereum",
       "tag": "LendingPool"
     },
     {
       "address": "0xDcD33426BA191383f1c9B431A342498fdac73488",
-      "network": "etherscan",
+      "network": "ethereum",
       "tag": "WETH Gateway"
     }
   ]

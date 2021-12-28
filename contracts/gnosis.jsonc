@@ -6,17 +6,17 @@
   "addresses": [
     {
       "address": "0x76E2cFc1F5Fa8F6a5b3fC4c8F4788F0116861F9B",
-      "network": "etherscan",
+      "network": "ethereum",
       "tag": "Proxy Factory 1.1.1"
     },
     {
       "address": "0x6851D6fDFAfD08c0295C392436245E5bc78B0185",
-      "network": "etherscan",
+      "network": "ethereum",
       "tag": "Mastercopy 1.2.0"
     },
     {
       "address": "0x8D29bE29923b68abfDD21e541b9374737B49cdAD",
-      "network": "etherscan",
+      "network": "ethereum",
       "tag": "Multi Send 1.1.1"
     }
   ]
