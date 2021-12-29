@@ -1,6 +1,8 @@
+export type Network = "ethereum" | "polygon" | "binance" | "avalanche";
+
 export interface TaggedAddress {
   address: string;
-  network: "ethereum" | "polygon" | "binance" | "avalanche";
+  network: Network;
   tag: string;
 }
 

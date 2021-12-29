@@ -20,14 +20,14 @@ bottom of this script.
 */
 import flatten from "lodash/flatten";
 import groupBy from "lodash/groupBy";
-import { ABIPack, Contract, Def, TaggedAddress } from "./types";
+import { ABIPack, Contract, Def, Network, TaggedAddress } from "./types";
 const fs = require("fs");
 const SDK = require("gridplus-sdk").Client;
 const superagent = require("superagent");
 const parseAbi = new SDK({ crypto: require("crypto") }).parseAbi;
 const jsonc = require("jsonc");
 const Throttle = require("superagent-throttle");
-
+const DEFAULT_NETWORK = "ethereum";
 const CONTRACT_NETWORKS = {
   ethereum: {
     baseUrl: "https://api.etherscan.io",
@@ -77,13 +77,17 @@ const CONTRACT_NETWORKS = {
 const CONTRACTS_PATH = "./contracts";
 const OUTPUT_DIRECTORY_PATH = "./abi_packs";
 
+function getNetworkConfig(network: Network) {
+  return CONTRACT_NETWORKS[network] ?? CONTRACT_NETWORKS[DEFAULT_NETWORK];
+}
+
 function getThrottle({ network }: TaggedAddress) {
-  const { throttle } = CONTRACT_NETWORKS[network];
+  const { throttle } = getNetworkConfig(network);
   return throttle.plugin();
 }
 
 function getNetworkUrl({ address, network }: TaggedAddress) {
-  const { baseUrl, apiKey, apiRoute } = CONTRACT_NETWORKS[network];
+  const { baseUrl, apiKey, apiRoute } = getNetworkConfig(network);
   return `${baseUrl}/${apiRoute}${address}&apikey=${apiKey}`;
 }
 function getPackFileName(pack: ABIPack) {
