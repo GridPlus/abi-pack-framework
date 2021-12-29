@@ -1,81 +1,55 @@
-/*
-This is a node.js script to generate GridPlus ABI packs, which are generally uploaded to a public S3 bucket and
-installable via the GridPlus Web Wallet (wallet.gridplus.io). You will need to have `gridplus-sdk` and `superagent`
-installed to run this script.
-
-To add more packs, take a look at the formatting of the existing ones (e.g. `UNISWAP_PACK`) and replicate that format:
-* `address` - smart contract address. This script scans mainnet by default, though in theory you could modify
-              it to scan contracts on a different network.
-* `app`     - the human readable name of the app or set of contracts. This is what gets displayed on web.gridplus.io
-* `fname`   - the file name where this will be saved: `./abi_packs/<fname>.json`
-* `website` - a URL ideally containing documentation about what these contracts are. Generally this site is hosted
-              by the app which deployed/uses the contracts
-
-To run this script, you will need a working Etherscan API key:
-
-> env ETHERSCAN_KEY=<my_etherscan_key> node gridplus_abi_builder.js
-
-If you wish to change which packs are being fetched and built, just change the `PACKS_TO_BUILD` variable near the 
-bottom of this script.
-*/
 import flatten from "lodash/flatten";
 import groupBy from "lodash/groupBy";
-import { ABIPack, Contract, Def, Network, TaggedAddress } from "./types";
+import {
+  ABIPack,
+  Contract,
+  ContractGroupedByNetwork,
+  Def,
+  Network,
+  TaggedAddress,
+} from "./types";
 const fs = require("fs");
 const SDK = require("gridplus-sdk").Client;
 const superagent = require("superagent");
 const parseAbi = new SDK({ crypto: require("crypto") }).parseAbi;
 const jsonc = require("jsonc");
 const Throttle = require("superagent-throttle");
+
+const CONTRACTS_PATH = "./contracts";
+const OUTPUT_DIRECTORY_PATH = "./abi_packs";
 const DEFAULT_NETWORK = "ethereum";
+const DEFAULT_THROTTLE = {
+  active: true,
+  rate: 5,
+  ratePer: 1000,
+  concurrent: 1,
+};
 const CONTRACT_NETWORKS = {
   ethereum: {
     baseUrl: "https://api.etherscan.io",
     apiKey: process.env.ETHERSCAN_KEY,
     apiRoute: "api?module=contract&action=getabi&address=",
-    throttle: new Throttle({
-      active: true,
-      rate: 5,
-      ratePer: 1000,
-      concurrent: 1,
-    }),
+    throttle: new Throttle(DEFAULT_THROTTLE),
   },
   polygon: {
     baseUrl: "https://api.polygonscan.com",
     apiKey: process.env.POLYGON_KEY,
     apiRoute: "api?module=contract&action=getabi&address=",
-    throttle: new Throttle({
-      active: true,
-      rate: 5,
-      ratePer: 1000,
-      concurrent: 1,
-    }),
+    throttle: new Throttle(DEFAULT_THROTTLE),
   },
   binance: {
     baseUrl: "https://api.bscscan.com",
     apiKey: process.env.BINANCE_KEY,
     apiRoute: "api?module=contract&action=getabi&address=",
-    throttle: new Throttle({
-      active: true,
-      rate: 5,
-      ratePer: 1000,
-      concurrent: 1,
-    }),
+    throttle: new Throttle(DEFAULT_THROTTLE),
   },
   avalanche: {
     baseUrl: "https://api.snowtrace.io",
     apiKey: process.env.SNOWTRACE_KEY,
     apiRoute: "api?module=contract&action=getabi&address=",
-    throttle: new Throttle({
-      active: true,
-      rate: 5,
-      ratePer: 1000,
-      concurrent: 1,
-    }),
+    throttle: new Throttle(DEFAULT_THROTTLE),
   },
 };
-const CONTRACTS_PATH = "./contracts";
-const OUTPUT_DIRECTORY_PATH = "./abi_packs";
 
 function getNetworkConfig(network: Network) {
   return CONTRACT_NETWORKS[network] ?? CONTRACT_NETWORKS[DEFAULT_NETWORK];
@@ -90,6 +64,7 @@ function getNetworkUrl({ address, network }: TaggedAddress) {
   const { baseUrl, apiKey, apiRoute } = getNetworkConfig(network);
   return `${baseUrl}/${apiRoute}${address}&apikey=${apiKey}`;
 }
+
 function getPackFileName(pack: ABIPack) {
   const formattedName = pack.metadata.name.replace(/\s+/g, "_").toLowerCase();
   return `v${pack.metadata.version}_${formattedName}_${pack.metadata.network}.json`;
