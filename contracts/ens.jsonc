@@ -1,0 +1,73 @@
+{
+    "name": "ENS",
+    "version": "2",
+    "desc": "Contract definitions from ENS",
+    "website": "https://github.com/ensdomains/ens-contracts/tree/master/deployments/mainnet",
+    "addresses": [
+      {
+        "address": "0x57f1887a8BF19b14fC0dF6Fd9B2acc9Af147eA85",
+        "tag": "BaseRegistrarImplementation"
+      },
+      {
+        "address": "0x58774Bb8acD458A640aF0B88238369A167546ef2",
+        "tag": "DNSRegistrar"
+      },
+      {
+        "address": "0x21745FF62108968fBf5aB1E07961CC0FCBeB2364",
+        "tag": "DNSSECImpl"
+      },
+      {
+        "address": "0xA2C122BE93b0074270ebeE7f6b7292C7deB45047",
+        "tag": "DefaultReverseResolver"
+      },
+      {
+        "address": "0x00000000000C2E074eC69A0dFb2997BA6C7d2e1e",
+        "tag": "ENSRegistry"
+      },
+      {
+        "address": "0x283Af0B28c62C092C9727F1Ee09c02CA627EB7F5",
+        "tag": "ETHRegistrarController"
+      },
+      {
+        "address": "0xe571A50F76ff7404F3Ce380D06CBd2c9c6Ca3670",
+        "tag": "P256SHA256Algorithm"
+      },
+      {
+        "address": "0x226159d592E2b063810a10Ebf6dcbADA94Ed68b8",
+        "tag": "PublicResolver"
+      },
+      {
+        "address": "0x765653c78f609826DfD091F9208Aeb610949A28F",
+        "tag": "RSASHA1Algorithm"
+      },
+      {
+        "address": "0xB83A8AC6900f19d77333e640550Bd8830d5fcb26",
+        "tag": "RSASHA256Algorithm"
+      },
+      {
+        "address": "0x084b1c3C81545d370f3634392De611CaaBFf8148",
+        "tag": "ReverseRegistrar"
+      },
+      {
+        "address": "0xaB528d626EC275E3faD363fF1393A41F581c5897",
+        "tag": "Root"
+      },
+      {
+        "address": "0x912dfBe4162efe45E08e39d6C39d68eDA7B267a4",
+        "tag": "SHA1Digest"
+      },
+      {
+        "address": "0x849851A7683cfF52De5F50C712C0606FEf6A3e8f",
+        "tag": "SHA1NSEC3Digest"
+      },
+      {
+        "address": "0xdf89B8C7c9e4FCb340a2f1AAAe1646a545dc4b40",
+        "tag": "SHA256Digest"
+      },
+      {
+        "address": "0xD10730069066cda980eDFb5e70eF678a38b5265F",
+        "tag": "TLDPublicSuffixList"
+      }
+    ]
+  }
+  
