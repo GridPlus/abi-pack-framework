@@ -16,7 +16,7 @@ export interface Contract {
 }
 
 export interface ProcessedContract extends Contract {
-  network: string;
+  network: Network;
 }
 
 export interface Def {
@@ -34,3 +34,8 @@ export interface ABIPack {
   metadata: ProcessedContract;
   defs: Def[];
 }
+
+export type ContractGroupedByNetwork = [
+  Network,
+  [TaggedAddress, ...TaggedAddress[]]
+][];

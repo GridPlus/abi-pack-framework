@@ -129,11 +129,17 @@ function fetchPackData(address: TaggedAddress) {
     .catch(console.error);
 }
 
+function groupContractByNetwork(contract: Contract) {
+  return Object.entries(
+    groupBy(contract.addresses, "network")
+  ) as ContractGroupedByNetwork;
+}
+
 function parseAddress(address: string): Def {
   return parseAbi("etherscan", address, true);
 }
 
-function generateMetadata(contract: Contract, network: string) {
+function generateMetadata(contract: Contract, network: Network) {
   return {
     ...contract,
     network,
@@ -150,15 +156,11 @@ function generateDefs(addresses: TaggedAddress[]) {
 }
 
 async function processContract(contract: Contract): Promise<ABIPack[]> {
-  const contractGroupedByNetwork = groupBy(contract.addresses, "network");
-
   return Promise.all(
-    Object.entries(contractGroupedByNetwork).map(
-      async ([network, addresses]) => ({
-        metadata: generateMetadata(contract, network),
-        defs: await generateDefs(addresses),
-      })
-    )
+    groupContractByNetwork(contract).map(async ([network, addresses]) => ({
+      metadata: generateMetadata(contract, network),
+      defs: await generateDefs(addresses),
+    }))
   );
 }
 
