@@ -18,7 +18,9 @@ To run this script, you will need a working Etherscan API key:
 If you wish to change which packs are being fetched and built, just change the `PACKS_TO_BUILD` variable near the 
 bottom of this script.
 */
-import { ABIPack, Contract, TaggedAddress } from "./types";
+import flatten from "lodash/flatten";
+import groupBy from "lodash/groupBy";
+import { ABIPack, Contract, Def, TaggedAddress } from "./types";
 const fs = require("fs");
 const SDK = require("gridplus-sdk").Client;
 const superagent = require("superagent");
@@ -86,7 +88,7 @@ function getNetworkUrl({ address, network }: TaggedAddress) {
 }
 function getPackFileName(pack: ABIPack) {
   const formattedName = pack.metadata.name.replace(/\s+/g, "_").toLowerCase();
-  return `v${pack.metadata.version}_${formattedName}.json`;
+  return `v${pack.metadata.version}_${formattedName}_${pack.metadata.network}.json`;
 }
 
 function getOutputFileLocation(pack: ABIPack) {
@@ -111,34 +113,54 @@ function fetchPackData(address: TaggedAddress) {
     .then((res: any) => JSON.parse(res.text))
     .then((json: any) => {
       if (json.status === "1") {
+        console.info(`Successfully fetched address ${address.address}`);
         return JSON.parse(json.result);
       } else {
-        console.error(`ERROR: ${json.result}`);
+        console.error(
+          `Failed to fetch address ${address.address}. ERROR: ${json.result}`
+        );
         return [];
       }
     })
     .catch(console.error);
 }
 
-function parseAddress(address: string) {
+function parseAddress(address: string): Def {
   return parseAbi("etherscan", address, true);
 }
 
-async function processContractData(contractData: Contract) {
-  const defs = await Promise.all(
-    contractData.addresses.map((address) =>
-      fetchPackData(address).then(parseAddress)
-    )
-  );
-
+function generateMetadata(contract: Contract, network: string) {
   return {
-    defs: defs.flat(),
-    metadata: contractData,
+    ...contract,
+    network,
+    addresses: contract.addresses.filter(
+      (address) => address.network === network
+    ),
   };
 }
 
-function writeIndexFile(packs: ABIPack[]) {
+function generateDefs(addresses: TaggedAddress[]) {
+  return Promise.all(
+    addresses.map((address) => fetchPackData(address).then(parseAddress))
+  ).then(flatten);
+}
+
+async function processContract(contract: Contract): Promise<ABIPack[]> {
+  const contractGroupedByNetwork = groupBy(contract.addresses, "network");
+
+  return Promise.all(
+    Object.entries(contractGroupedByNetwork).map(
+      async ([network, addresses]) => ({
+        metadata: generateMetadata(contract, network),
+        defs: await generateDefs(addresses),
+      })
+    )
+  );
+}
+
+function writeIndexFile(packs: ABIPack[][]) {
   const formattedPackData = packs
+    .flat()
     .map((pack) => ({
       ...pack.metadata,
       fname: getPackFileName(pack),
@@ -146,7 +168,7 @@ function writeIndexFile(packs: ABIPack[]) {
     .sort((packA, packB) => (packB.priority ?? 0) - (packA.priority ?? 0));
   const dataToWrite = JSON.stringify(formattedPackData);
   fs.writeFileSync(`${OUTPUT_DIRECTORY_PATH}/index.json`, dataToWrite);
-  console.log(`Wrote Index`);
+  console.log(`Wrote Index for ${formattedPackData.length} ABI packs`);
 }
 
 function writePackData(packs: ABIPack[]) {
@@ -157,7 +179,9 @@ function writePackData(packs: ABIPack[]) {
   });
 }
 
-Promise.all(loadContractFiles().map(processContractData)).then((packs) => {
-  writePackData(packs);
-  writeIndexFile(packs);
-});
+function outputDataToFiles(packsByNetwork: ABIPack[][]) {
+  packsByNetwork.forEach(writePackData);
+  writeIndexFile(packsByNetwork);
+}
+
+Promise.all(loadContractFiles().map(processContract)).then(outputDataToFiles);

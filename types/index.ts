@@ -13,7 +13,22 @@ export interface Contract {
   addresses: TaggedAddress[];
 }
 
+export interface ProcessedContract extends Contract {
+  network: string;
+}
+
+export interface Def {
+  name: string;
+  sig: string;
+  params: {
+    isArray: boolean;
+    arraySz: number;
+    name: string;
+    latticeTypeIdx: number;
+  }[];
+}
+
 export interface ABIPack {
-  metadata: Contract;
-  defs: any;
+  metadata: ProcessedContract;
+  defs: Def[];
 }
