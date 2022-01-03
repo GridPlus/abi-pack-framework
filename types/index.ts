@@ -1,5 +1,8 @@
+export type Network = "ethereum" | "polygon" | "binance" | "avalanche";
+
 export interface TaggedAddress {
   address: string;
+  network: Network;
   tag: string;
 }
 
@@ -12,7 +15,27 @@ export interface Contract {
   addresses: TaggedAddress[];
 }
 
-export interface ABIPack {
-  metadata: Contract;
-  defs: any;
+export interface ProcessedContract extends Contract {
+  network: Network;
 }
+
+export interface Def {
+  name: string;
+  sig: string;
+  params: {
+    isArray: boolean;
+    arraySz: number;
+    name: string;
+    latticeTypeIdx: number;
+  }[];
+}
+
+export interface ABIPack {
+  metadata: ProcessedContract;
+  defs: Def[];
+}
+
+export type ContractGroupedByNetwork = [
+  Network,
+  [TaggedAddress, ...TaggedAddress[]]
+][];

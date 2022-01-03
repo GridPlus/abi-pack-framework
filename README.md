@@ -19,6 +19,7 @@ Contract data must be in a file with a `.json` (or `.jsonc` if the file contains
   addresses: [
     {
       address: string;
+      network: "ethereum" | "polygon" | "binance" | "avalanche";
       tag: string;
     }
   ];

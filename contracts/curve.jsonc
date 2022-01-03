@@ -7,62 +7,76 @@
     // -- Base Pools
     {
       "address": "0x49849C98ae39Fff122806C06791Fa73784FB3675",
+      "network": "ethereum",
       "tag": "CurveTokenV1.vy"
     },
     {
       "address": "0x6c3F90f043a72FA612cbac8115EE7e52BDe6E490",
+      "network": "ethereum",
       "tag": "CurveTokenV2.vy"
     },
     {
       "address": "0xFd2a8fA60Abd58Efe3EeE34dd494cD491dC14900",
+      "network": "ethereum",
       "tag": "CurveTokenV3.vy"
     },
     {
       "address": "0x845838DF265Dcd2c412A1Dc9e959c7d08537f8a2",
+      "network": "ethereum",
       "tag": "CurveContractV1.vy"
     },
 
     // -- Liquidity Gauges
     {
       "address": "0xd662908ADA2Ea1916B3318327A97eB18aD588b5d",
+      "network": "ethereum",
       "tag": "LiquidityGaugeV2.vy"
     },
     {
       "address": "0xbFcF63294aD7105dEa65aA58F8AE5BE2D9d0952A",
+      "network": "ethereum",
       "tag": "LiquidityGague.sol"
     },
     {
       "address": "0xAEA6c312f4b3E04D752946d329693F7293bC2e6D",
+      "network": "ethereum",
       "tag": "LiquidityGaugeReward.vy"
     },
 
     // -- Curve DAO
     {
       "address": "0xD533a949740bb3306d119CC777fa900bA034cd52",
+      "network": "ethereum",
       "tag": "ERC2CRV.sol"
     },
     {
       "address": "0xA464e6DCda8AC41e03616F95f4BC98a13b8922Dc",
+      "network": "ethereum",
       "tag": "FeeDistributor.vy"
     },
     {
       "address": "0x519AFB566c05E00cfB9af73496D00217A630e4D5",
+      "network": "ethereum",
       "tag": "GaugeProxy.vy"
     },
     {
       "address": "0xd061D61a4d941c39E5453435B6345Dc261C2fcE0",
+      "network": "ethereum",
       "tag": "Minter.vy"
     },
     {
       "address": "0x6e8f6D1DA6232d5E40b0B8758A0145D6C5123eB7",
+      "network": "ethereum",
       "tag": "PoolProxy.vy"
     },
     {
       "address": "0x5f3b5DfEb7B28CDbD7FAba78963EE202a494e2A2",
+      "network": "ethereum",
       "tag": "VotingEscrow.vy"
     },
     {
       "address": "0x575ccd8e2d300e2377b43478339e364000318e2c",
+      "network": "ethereum",
       "tag": "VestingEscrow.v"
     }
   ]
