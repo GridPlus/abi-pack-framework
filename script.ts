@@ -6,7 +6,8 @@ import {
   ContractGroupedByNetwork,
   Def,
   Network,
-  TaggedAddress,
+  PackData,
+  TaggedAddress
 } from "./types";
 const fs = require("fs");
 const SDK = require("gridplus-sdk").Client;
@@ -85,7 +86,7 @@ function loadContractFiles(): Contract[] {
     .map(injestMetadata);
 }
 
-function fetchPackData(address: TaggedAddress) {
+function fetchPackData(address: TaggedAddress): Promise<PackData> {
   return superagent
     .get(getNetworkUrl(address))
     .use(getThrottle(address))
@@ -110,8 +111,8 @@ function groupContractByNetwork(contract: Contract) {
   ) as ContractGroupedByNetwork;
 }
 
-function parseAddress(address: string): Def {
-  return parseAbi("etherscan", address, true);
+function parsePackData(packData: PackData): Def {
+  return parseAbi("etherscan", packData, true);
 }
 
 function generateMetadata(contract: Contract, network: Network) {
@@ -126,7 +127,7 @@ function generateMetadata(contract: Contract, network: Network) {
 
 function generateDefs(addresses: TaggedAddress[]) {
   return Promise.all(
-    addresses.map((address) => fetchPackData(address).then(parseAddress))
+    addresses.map((address) => fetchPackData(address).then(parsePackData))
   ).then(flatten);
 }
 

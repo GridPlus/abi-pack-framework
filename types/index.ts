@@ -35,6 +35,15 @@ export interface ABIPack {
   defs: Def[];
 }
 
+export interface PackData {
+  name: string,
+  outputs: any[],
+  inputs: any[],
+  stateMutability: string,
+  type: string,
+  gas: number
+}[]
+
 export type ContractGroupedByNetwork = [
   Network,
   [TaggedAddress, ...TaggedAddress[]]
