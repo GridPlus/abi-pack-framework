@@ -106,6 +106,20 @@
       "address": "0x130cE4E4F76c2265f94a961D70618562de0bb8d2",
       "network": "polygon",
       "tag": "Inverse Bitcoin FLI Polygon"
+    },
+
+    // -- Mainnet Contracts
+    {
+      "address": "0xf42eCDC112365fF79a745B4cf7D4C266bd6E4b25",
+      "network": "ethereum",
+      "tag": "0x Exchange Issuance"
+    },
+
+    // -- Polygon Contracts
+    {
+      "address": "0x600d9950c6ecAef98Cc42fa207E92397A6c43416",
+      "network": "polygon",
+      "tag": "Leveraged Token Exchange Issuance"
     }
   ]
 }
