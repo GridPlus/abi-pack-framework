@@ -1,0 +1,33 @@
+{
+  "name": "GutterCatGang NFT ecosystem",
+  "desc": "Contract definitions from the GCG, including Cats, Dogs, Rats Pigeons and Juice",
+  "version": "2",
+  "website": "https://guttercatgang.com/",
+  "addresses": [
+    {
+      "address": "0xEdB61f74B0d09B2558F1eeb79B247c1F363Ae452",
+      "network": "ethereum",
+      "tag": "GutterCatGang"
+    },
+    {
+      "address": "0x6E9DA81ce622fB65ABf6a8d8040e460fF2543Add",
+      "network": "ethereum",
+      "tag": "GutterDogs"
+    },
+    {
+      "address": "0xD7B397eDad16ca8111CA4A3B832d0a5E3ae2438C",
+      "network": "ethereum",
+      "tag": "GutterRats"
+    },
+    {
+      "address": "0x950b9476a4de757BB134483029AC4Ec17E739e3A",
+      "network": "ethereum",
+      "tag": "GutterPigeons"
+    },
+    {
+      "address": "0x092bBc993042a69811d23FEb0E64E3bfa0920C6A",
+      "network": "ethereum",
+      "tag": "GutterJuice"
+    }
+  ]
+}
