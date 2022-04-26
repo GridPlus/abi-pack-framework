@@ -1,0 +1,125 @@
+{
+  "name": "Index Coop",
+  "desc": "Contract definitions from Index Coop",
+  "version": "1",
+  "website": "https://github.com/IndexCoop/index-coop-smart-contracts",
+  "addresses": [
+    // -- Mainnet Tokens
+    {
+      "address": "0x0954906da0Bf32d5479e25f46056d22f08464cab",
+      "network": "ethereum",
+      "tag": "Index Token"
+    },
+    {
+      "address": "0x1494CA1F11D487c2bBe4543E90080AeBa4BA3C2b",
+      "network": "ethereum",
+      "tag": "DeFi Pulse Index"
+    },
+    {
+      "address": "0xAa6E8127831c9DE45ae56bB1b0d4D4Da6e5665BD",
+      "network": "ethereum",
+      "tag": "Ethereum 2x FLI"
+    },
+    {
+      "address": "0x72e364F2ABdC788b7E918bc238B21f109Cd634D7",
+      "network": "ethereum",
+      "tag": "Metaverse Index"
+    },
+    {
+      "address": "0x0B498ff89709d3838a063f1dFA463091F9801c2b",
+      "network": "ethereum",
+      "tag": "Bitcoin 2x FLI"
+    },
+    {
+      "address": "0x2aF1dF3AB0ab157e1E2Ad8F88A7D04fbea0c7dc6",
+      "network": "ethereum",
+      "tag": "Bankless BED Index"
+    },
+    {
+      "address": "0x33d63Ba1E57E54779F7dDAeaA7109349344cf5F1",
+      "network": "ethereum",
+      "tag": "Data Economy Index"
+    },
+    {
+      "address": "0x47110d43175f7f2C2425E7d15792acC5817EB44f",
+      "network": "ethereum",
+      "tag": "Bankless DeFi Innovation Index"
+    },
+    {
+      "address": "0x47110d43175f7f2C2425E7d15792acC5817EB44f",
+      "network": "ethereum",
+      "tag": "Bankless DeFi Innovation Index"
+    },
+
+    // -- Polygon Tokens
+    {
+      "address": "0xfBd8A3b908e764dBcD51e27992464B4432A1132b",
+      "network": "polygon",
+      "tag": "Index Token"
+    },
+    {
+      "address": "0x85955046DF4668e1DD369D2DE9f3AEB98DD2A369",
+      "network": "polygon",
+      "tag": "DeFi Pulse Index"
+    },
+    {
+      "address": "0x3Ad707dA309f3845cd602059901E39C4dcd66473",
+      "network": "polygon",
+      "tag": "Ethereum 2x FLI Polygon"
+    },
+    {
+      "address": "0xfe712251173A2cd5F5bE2B46Bb528328EA3565E1",
+      "network": "polygon",
+      "tag": "Metaverse Index"
+    },
+    {
+      "address": "0xd6ca869a4ec9ed2c7e618062cdc45306d8dbbc14",
+      "network": "polygon",
+      "tag": "Bitcoin 2x FLI Polygon"
+    },
+    {
+      "address": "0x1D607Faa0A51518a7728580C238d912747e71F7a",
+      "network": "polygon",
+      "tag": "Data Economy Index"
+    },
+    {
+      "address": "0x7fb27ee135db455de5ab1ccec66a24cbc82e712d",
+      "network": "polygon",
+      "tag": "Bankless DeFi Innovation Index"
+    },
+    {
+      "address": "0xf287D97B6345bad3D88856b26Fb7c0ab3F2C7976",
+      "network": "polygon",
+      "tag": "Matic 2x FLI Polygon"
+    },
+    {
+      "address": "0x340f412860dA7b7823df372a2b59Ff78b7ae6abc",
+      "network": "polygon",
+      "tag": "Inverse Matic FLI Polygon"
+    },
+    {
+      "address": "0x4f025829C4B13dF652f38Abd2AB901185fF1e609",
+      "network": "polygon",
+      "tag": "Inverse ETH FLI Polygon"
+    },
+    {
+      "address": "0x130cE4E4F76c2265f94a961D70618562de0bb8d2",
+      "network": "polygon",
+      "tag": "Inverse Bitcoin FLI Polygon"
+    },
+
+    // -- Mainnet Contracts
+    {
+      "address": "0xf42eCDC112365fF79a745B4cf7D4C266bd6E4b25",
+      "network": "ethereum",
+      "tag": "0x Exchange Issuance"
+    },
+
+    // -- Polygon Contracts
+    {
+      "address": "0x600d9950c6ecAef98Cc42fa207E92397A6c43416",
+      "network": "polygon",
+      "tag": "Leveraged Token Exchange Issuance"
+    }
+  ]
+}
