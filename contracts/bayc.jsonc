@@ -1,0 +1,28 @@
+{
+  "name": "BoredApeYachtClub ecosystem",
+  "desc": "Contract definitions from the BAYC, including Bored Apes, Mutants, Dogs and Serums",
+  "version": "2",
+  "website": "https://boredapeyachtclub.com",
+  "addresses": [
+    {
+      "address": "0xBC4CA0EdA7647A8aB7C2061c2E118A18a936f13D",
+      "network": "ethereum",
+      "tag": "BoredApeYachtClub"
+    },
+    {
+      "address": "0x60E4d786628Fea6478F785A6d7e704777c86a7c6",
+      "network": "ethereum",
+      "tag": "MutantApeYachtClub"
+    },
+    {
+      "address": "0xba30E5F9Bb24caa003E9f2f0497Ad287FDF95623",
+      "network": "ethereum",
+      "tag": "BoredApeKennelClub"
+    },
+    {
+      "address": "0x22c36BfdCef207F9c0CC941936eff94D4246d14A",
+      "network": "ethereum",
+      "tag": "BoredApeChemistryClub"
+    }
+  ]
+}
